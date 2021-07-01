@@ -1,324 +1,310 @@
-var M = module.exports = {};
+var M = (module.exports = {});
 
-var dom = require('../lib/dom'),
-    matrix = require('../lib/matrix'),
-    util = require('../lib/util'),
-    cell = require('../lib/cell'),
-    css = require('../lib/css'),
-    clipboard = require('./clipboard')
-;
-
+var dom = require("../lib/dom"),
+  matrix = require("../lib/matrix"),
+  util = require("../lib/util"),
+  cell = require("../lib/cell"),
+  css = require("../lib/css"),
+  clipboard = require("./clipboard");
 function toMatrix(tbl) {
-    console.log(util.timeStart('toMatrix'));
+  console.log(util.timeStart("toMatrix"));
 
-    var tds = {},
-        rows = {},
-        cols = {};
+  var tds = {},
+    rows = {},
+    cols = {};
 
-    dom.cells(tbl).forEach(function (td) {
-        var bounds = dom.bounds(td);
-        var c = bounds.x, r = bounds.y;
-        cols[c] = rows[r] = 1;
-        tds[r + '/' + c] = td;
+  dom.cells(tbl).forEach(function (td) {
+    var bounds = dom.bounds(td);
+    var c = bounds.x,
+      r = bounds.y;
+    cols[c] = rows[r] = 1;
+    tds[r + "/" + c] = td;
+  });
+
+  rows = Object.keys(rows).sort(util.numeric);
+  cols = Object.keys(cols).sort(util.numeric);
+
+  var mat = rows.map(function (r) {
+    return cols.map(function (c) {
+      var td = tds[r + "/" + c];
+      return td ? { td: td } : {};
     });
+  });
 
-    rows = Object.keys(rows).sort(util.numeric);
-    cols = Object.keys(cols).sort(util.numeric);
+  matrix.each(mat, function (row, node, ri, ni) {
+    if (!node.td) return;
 
-    var mat = rows.map(function (r) {
-        return cols.map(function (c) {
-            var td = tds[r + '/' + c];
-            return td ? {td: td} : {};
-        });
-    });
+    var rs = parseInt(dom.attr(node.td, "rowSpan")) || 1;
+    var cs = parseInt(dom.attr(node.td, "colSpan")) || 1;
 
-    matrix.each(mat, function (row, node, ri, ni) {
-        if (!node.td)
-            return;
+    for (var i = 1; i < cs; i++) {
+      if (row[ni + i] && !row[ni + i].td) row[ni + i].colRef = node;
+    }
 
-        var rs = parseInt(dom.attr(node.td, 'rowSpan')) || 1;
-        var cs = parseInt(dom.attr(node.td, 'colSpan')) || 1;
+    for (var i = 1; i < rs; i++) {
+      if (mat[ri + i] && mat[ri + i][ni] && !mat[ri + i][ni].td)
+        mat[ri + i][ni].rowRef = node;
+    }
+  });
 
-        for (var i = 1; i < cs; i++) {
-            if (row[ni + i] && !row[ni + i].td)
-                row[ni + i].colRef = node;
-        }
+  console.log(util.timeEnd("toMatrix"));
 
-        for (var i = 1; i < rs; i++) {
-            if (mat[ri + i] && mat[ri + i][ni] && !mat[ri + i][ni].td)
-                mat[ri + i][ni].rowRef = node;
-        }
-    });
-
-    console.log(util.timeEnd('toMatrix'));
-
-    return mat;
+  return mat;
 }
 
 function computeSpans(mat) {
-    matrix.each(mat, function (_, node) {
-        if (node.colRef)
-            node.colRef.colSpan = (node.colRef.colSpan || 0) + 1;
-        if (node.rowRef)
-            node.rowRef.rowSpan = (node.rowRef.rowSpan || 0) + 1;
-    });
+  matrix.each(mat, function (_, node) {
+    if (node.colRef) node.colRef.colSpan = (node.colRef.colSpan || 0) + 1;
+    if (node.rowRef) node.rowRef.rowSpan = (node.rowRef.rowSpan || 0) + 1;
+  });
 }
 
 function trim(tbl) {
-    console.log(util.timeStart('trim.filter'));
+  console.log(util.timeStart("trim.filter"));
 
-    var mat = matrix.trim(toMatrix(tbl), function (node) {
-        return cell.selected(node.td);
-    });
+  var mat = matrix.trim(toMatrix(tbl), function (node) {
+    return cell.selected(node.td);
+  });
 
-    console.log(util.timeEnd('trim.filter'));
+  console.log(util.timeEnd("trim.filter"));
 
-    console.log(util.timeStart('trim.remove'));
+  console.log(util.timeStart("trim.remove"));
 
-    var tds = [];
+  var tds = [];
 
-    matrix.each(mat, function (row, node) {
-        if (node.td) {
-            tds.push(node.td);
-        }
-    });
+  matrix.each(mat, function (row, node) {
+    if (node.td) {
+      tds.push(node.td);
+    }
+  });
 
-    var junk = [];
+  var junk = [];
 
-    dom.cells(tbl).forEach(function (td) {
-        if (tds.indexOf(td) < 0)
-            junk.push(td);
-        else if (!cell.selected(td))
-            td.innerHTML = '';
-    });
+  dom.cells(tbl).forEach(function (td) {
+    if (tds.indexOf(td) < 0) junk.push(td);
+    else if (!cell.selected(td)) td.innerHTML = "";
+  });
 
-    dom.remove(junk);
-    junk = [];
+  dom.remove(junk);
+  junk = [];
 
-    dom.find('tr', tbl).forEach(function (tr) {
-        if (dom.find('td, th', tr).length === 0) {
-            junk.push(tr);
-        }
-    });
+  dom.find("tr", tbl).forEach(function (tr) {
+    if (dom.find("td, th", tr).length === 0) {
+      junk.push(tr);
+    }
+  });
 
-    dom.remove(junk);
+  dom.remove(junk);
 
-    console.log(util.timeEnd('trim.remove'));
+  console.log(util.timeEnd("trim.remove"));
 
-    computeSpans(mat);
+  computeSpans(mat);
 
-    matrix.each(mat, function (_, node) {
-        if (node.td) {
-            dom.attr(node.td, 'rowSpan', node.rowSpan ? (node.rowSpan + 1) : null);
-            dom.attr(node.td, 'colSpan', node.colSpan ? (node.colSpan + 1) : null);
-        }
-    });
+  matrix.each(mat, function (_, node) {
+    if (node.td) {
+      dom.attr(node.td, "rowSpan", node.rowSpan ? node.rowSpan + 1 : null);
+      dom.attr(node.td, "colSpan", node.colSpan ? node.colSpan + 1 : null);
+    }
+  });
 }
 
 function fixRelativeLinks(where, fixCssUrls) {
+  var aa = where.ownerDocument.createElement("A");
 
-    var aa = where.ownerDocument.createElement('A');
+  function fixUrl(url) {
+    // since we've set BASE url, this works
+    aa.href = url;
+    return aa.href;
+  }
 
-    function fixUrl(url) {
-        // since we've set BASE url, this works
-        aa.href = url;
-        return aa.href;
-    }
+  function fixTags(tags, attrs) {
+    dom.find(tags, where).forEach(function (t) {
+      attrs.forEach(function (attr) {
+        var v = dom.attr(t, attr);
+        if (v) {
+          dom.attr(t, attr, fixUrl(v));
+        }
+      });
+    });
+  }
 
-    function fixTags(tags, attrs) {
-        dom.find(tags, where).forEach(function (t) {
-            attrs.forEach(function (attr) {
-                var v = dom.attr(t, attr);
-                if (v) {
-                    dom.attr(t, attr, fixUrl(v));
-                }
-            });
-        });
-    }
+  fixTags("A, AREA, LINK", ["href"]);
+  fixTags("IMG, INPUT, SCRIPT", ["src", "longdesc", "usemap"]);
+  fixTags("FORM", ["action"]);
+  fixTags("Q, BLOCKQUOTE, INS, DEL", ["cite"]);
+  fixTags("OBJECT", ["classid", "codebase", "data", "usemap"]);
 
+  if (fixCssUrls) {
+    dom.find("*", where).forEach(function (el) {
+      var style = dom.attr(el, "style");
 
-    fixTags('A, AREA, LINK', ['href']);
-    fixTags('IMG, INPUT, SCRIPT', ['src', 'longdesc', 'usemap']);
-    fixTags('FORM', ['action']);
-    fixTags('Q, BLOCKQUOTE, INS, DEL', ['cite']);
-    fixTags('OBJECT', ['classid', 'codebase', 'data', 'usemap']);
+      if (!style || style.toLowerCase().indexOf("url") < 0) return;
 
-    if (fixCssUrls) {
-        dom.find('*', where).forEach(function (el) {
-            var style = dom.attr(el, 'style');
+      var fixStyle = style.replace(
+        /(\burl\s*\()([^()]+)/gi,
+        function (_, pfx, url) {
+          url = util.strip(url);
+          if (url[0] === '"' || url[0] === "'") {
+            return pfx + url[0] + fixUrl(url.slice(1, -1)) + url[0];
+          }
+          return pfx + fixUrl(url);
+        }
+      );
 
-            if (!style || style.toLowerCase().indexOf('url') < 0)
-                return;
-
-            var fixStyle = style.replace(/(\burl\s*\()([^()]+)/gi, function (_, pfx, url) {
-                url = util.strip(url);
-                if (url[0] === '"' || url[0] === '\'') {
-                    return pfx + url[0] + fixUrl(url.slice(1, -1)) + url[0];
-                }
-                return pfx + fixUrl(url);
-            });
-
-            if (fixStyle !== style)
-                dom.attr(el, 'style', fixStyle);
-        });
-    }
+      if (fixStyle !== style) dom.attr(el, "style", fixStyle);
+    });
+  }
 }
 
 function removeHiddenElements(node) {
-    var hidden = [];
+  var hidden = [];
 
-    dom.find('*', node).forEach(function (el) {
-        if (!dom.visible(el)) {
-            hidden.push(el);
-        }
-    });
-
-    if (hidden.length) {
-        console.log('removeHidden: ' + hidden.length);
-        dom.remove(hidden);
+  dom.find("*", node).forEach(function (el) {
+    if (!dom.visible(el)) {
+      hidden.push(el);
     }
+  });
+
+  if (hidden.length) {
+    console.log("removeHidden: " + hidden.length);
+    dom.remove(hidden);
+  }
 }
 tcc = function (text) {
-    console.log(util.timeStart('textCopy'));
+  console.log(util.timeStart("textCopy"));
 
-    var t = document.createElement('textarea');
-    document.body.appendChild(t);
+  var t = document.createElement("textarea");
+  document.body.appendChild(t);
 
-    t.value = text;
-    t.focus();
-    t.select();
+  t.value = text;
+  t.focus();
+  t.select();
 
-    document.execCommand('copy');
-    document.body.removeChild(t);
+  document.execCommand("copy");
+  document.body.removeChild(t);
 
-    console.log(util.timeEnd('textCopy'));
+  console.log(util.timeEnd("textCopy"));
 };
 
-M.table = function () {
-};
+M.table = function () {};
 
 M.table.prototype.init = function (data, options) {
-    console.log(util.timeStart('paste.init'));
+  console.log(util.timeStart("paste.init"));
 
-    this.frame = document.createElement('IFRAME');
-    this.frame.setAttribute('sandbox', 'allow-same-origin');
-    document.body.appendChild(this.frame);
+  this.frame = document.createElement("IFRAME");
+  this.frame.setAttribute("sandbox", "allow-same-origin");
+  document.body.appendChild(this.frame);
 
-    this.doc = this.frame.contentDocument;
-    this.body = this.doc.body;
+  this.doc = this.frame.contentDocument;
+  this.body = this.doc.body;
 
-    var base = this.doc.createElement('BASE');
-    dom.attr(base, 'href', data.url);
-    this.body.appendChild(base);
+  var base = this.doc.createElement("BASE");
+  dom.attr(base, "href", data.url);
+  this.body.appendChild(base);
 
-    // some cells (e.g. containing an image) could become width=0
-    // after paste, breaking toMatrix calculations
-    var css = this.doc.createElement('STYLE');
-    css.type = "text/css";
-    css.innerHTML = 'td { min-width: 1px; }';
-    this.body.appendChild(css);
+  // some cells (e.g. containing an image) could become width=0
+  // after paste, breaking toMatrix calculations
+  var css = this.doc.createElement("STYLE");
+  css.type = "text/css";
+  css.innerHTML = "td { min-width: 1px; }";
+  this.body.appendChild(css);
 
-    this.div = this.doc.createElement('DIV');
-    this.div.contentEditable = true;
-    this.body.appendChild(this.div);
+  this.div = this.doc.createElement("DIV");
+  this.div.contentEditable = true;
+  this.body.appendChild(this.div);
 
-    var ok = this.initTable(data, options);
+  var ok = this.initTable(data, options);
 
-    console.log('paste.init=' + ok + ' method=' + options.method);
-    console.log(util.timeEnd('paste.init'));
+  console.log("paste.init=" + ok + " method=" + options.method);
+  console.log(util.timeEnd("paste.init"));
 
-    return ok;
+  return ok;
 };
 
 M.table.prototype.initTable = function (data, options) {
+  console.log(util.timeStart("paste.insertTable"));
 
+  if (options.method === "clipboard") {
+    this.div.focus();
 
-    console.log(util.timeStart('paste.insertTable'));
+    // NB: just pasting the clipboard via `this.doc.execCommand('paste')`
+    // is very slow for some reason. Instead, intercept paste
+    // to obtain the clipboard and insert it via innerHTML which is waaay faster
 
-    if (options.method === 'clipboard') {
-        this.div.focus();
+    this.div.innerHTML = clipboard.content();
 
-        // NB: just pasting the clipboard via `this.doc.execCommand('paste')`
-        // is very slow for some reason. Instead, intercept paste
-        // to obtain the clipboard and insert it via innerHTML which is waaay faster
+    // destroy the clipboard to avoid pasting of intermediate results
+    // this doesn't really fix that because they can hit paste before
+    // .content() finishes, but still...
+    clipboard.copyText("");
+  }
 
-        this.div.innerHTML = clipboard.content();
+  if (options.method === "transfer") {
+    this.div.innerHTML = data.html;
+  }
 
-        // destroy the clipboard to avoid pasting of intermediate results
-        // this doesn't really fix that because they can hit paste before
-        // .content() finishes, but still...
-        clipboard.copyText('');
-    }
+  console.log(util.timeEnd("paste.insertTable"));
 
-    if (options.method === 'transfer') {
-        this.div.innerHTML = data.html;
-    }
+  this.table = dom.findOne("table", this.div);
 
-    console.log(util.timeEnd('paste.insertTable'));
+  if (!this.table || dom.tag(this.table) !== "TABLE") return false;
 
-    this.table = dom.findOne('table', this.div);
+  if (data.hasSelection) {
+    console.log(util.timeStart("paste.trim"));
+    trim(this.table);
+    console.log(util.timeEnd("paste.trim"));
+  }
 
-    if (!this.table || dom.tag(this.table) !== 'TABLE')
-        return false;
+  if (options.method === "transfer" && options.keepStyles) {
+    console.log(util.timeStart("paste.restoreStyles"));
 
-    if (data.hasSelection) {
-        console.log(util.timeStart('paste.trim'));
-        trim(this.table);
-        console.log(util.timeEnd('paste.trim'));
-    }
+    dom.findSelf("*", this.table).forEach(function (el) {
+      var uid = dom.attr(el, "data-copytables-uid");
+      if (uid && el.style) {
+        dom.removeAttr(el, "style");
+        el.style.cssText = css.compute(css.read(el), data.css[uid] || {});
+      }
+      dom.removeAttr(el, "data-copytables-uid");
+    });
 
-    if (options.method === 'transfer' && options.keepStyles) {
-        console.log(util.timeStart('paste.restoreStyles'));
+    console.log(util.timeEnd("paste.restoreStyles"));
+  }
 
-        dom.findSelf('*', this.table).forEach(function (el) {
-            var uid = dom.attr(el, 'data-copytables-uid');
-            if (uid && el.style) {
-                dom.removeAttr(el, 'style');
-                el.style.cssText = css.compute(css.read(el), data.css[uid] || {});
-            }
-            dom.removeAttr(el, 'data-copytables-uid')
-        });
+  if (options.method === "transfer" && !options.keepHidden) {
+    console.log(util.timeStart("paste.removeHidden"));
+    removeHiddenElements(this.div);
+    console.log(util.timeEnd("paste.removeHidden"));
+  }
 
-        console.log(util.timeEnd('paste.restoreStyles'));
-    }
+  fixRelativeLinks(this.div, options.keepStyles);
+  dom.cells(this.table).forEach(cell.reset);
 
-    if (options.method === 'transfer' && !options.keepHidden) {
-        console.log(util.timeStart('paste.removeHidden'));
-        removeHiddenElements(this.div);
-        console.log(util.timeEnd('paste.removeHidden'));
-    }
+  if (!options.keepStyles) {
+    dom.findSelf("*", this.table).forEach(function (el) {
+      dom.removeAttr(el, "style");
+      dom.removeAttr(el, "class");
+    });
+  }
 
-    fixRelativeLinks(this.div, options.keepStyles);
-    dom.cells(this.table).forEach(cell.reset);
-
-    if (!options.keepStyles) {
-        dom.findSelf('*', this.table).forEach(function (el) {
-            dom.removeAttr(el, 'style');
-            dom.removeAttr(el, 'class');
-        });
-    }
-
-    return true;
+  return true;
 };
 
 M.table.prototype.html = function () {
-    return this.table.outerHTML;
+  return this.table.outerHTML;
 };
 
 M.table.prototype.nodeMatrix = function () {
-    var mat = toMatrix(this.table);
-    computeSpans(mat);
-    return mat;
+  var mat = toMatrix(this.table);
+  computeSpans(mat);
+  return mat;
 };
 
 M.table.prototype.textMatrix = function () {
-    return matrix.map(toMatrix(this.table), function (_, node) {
-        return dom.textContent(node.td);
-    });
+  return matrix.map(toMatrix(this.table), function (_, node) {
+    return dom.textContent(node.td);
+  });
 };
 
-
 M.table.prototype.destroy = function () {
-    if (this.frame)
-        document.body.removeChild(this.frame);
+  if (this.frame) document.body.removeChild(this.frame);
 };

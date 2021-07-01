@@ -1,22 +1,20 @@
-let fs = require('fs'),
-    express = require('express'),
-    mustache = require('mustache'),
-    glob = require('glob'),
-    app = express();
+let fs = require("fs"),
+  express = require("express"),
+  mustache = require("mustache"),
+  glob = require("glob"),
+  app = express();
 
 Number.prototype.times = function (fn) {
-    let a = [];
-    for (let i = 0; i < Number(this); i++)
-        a.push(fn(i));
-    return a;
+  let a = [];
+  for (let i = 0; i < Number(this); i++) a.push(fn(i));
+  return a;
 };
 
-let file = path => fs.readFileSync(path, 'utf8');
+let file = (path) => fs.readFileSync(path, "utf8");
 
 let renderHelpers = {
-
-    textSource() {
-        return `
+  textSource() {
+    return `
         All Gaul is divided into three parts, one of which the Belgae inhabit, the Aquitani
         another, those who in their own language are called Celts, in our Gauls, the third. All
         these differ from each other in language, customs and laws. The river Garonne separates
@@ -36,89 +34,84 @@ let renderHelpers = {
         Pyrenaean mountains and to that part of the ocean which is near Spain: it looks between
         the setting of the sun, and the north star.
         `;
-    },
+  },
 
-    text()  {
-        let text = this.textSource();
-        let a = Math.floor(Math.random() * text.length);
-        let b = Math.floor(Math.random() * text.length);
+  text() {
+    let text = this.textSource();
+    let a = Math.floor(Math.random() * text.length);
+    let b = Math.floor(Math.random() * text.length);
 
-        return '<p>' + text.substr(a, b) + '</p>';
-    },
+    return "<p>" + text.substr(a, b) + "</p>";
+  },
 
-    numTable(rows, cols) {
-        let s = '';
-        rows.times(function (r) {
-            s += '<tr>';
-            cols.times(function (c) {
-                s += `<td>${r + 1}.${c + 1}</td>`;
-            });
-            s += '</tr>';
-        });
-        return `<table>${s}</table>`;
-    }
+  numTable(rows, cols) {
+    let s = "";
+    rows.times(function (r) {
+      s += "<tr>";
+      cols.times(function (c) {
+        s += `<td>${r + 1}.${c + 1}</td>`;
+      });
+      s += "</tr>";
+    });
+    return `<table>${s}</table>`;
+  },
 };
 
+let renderTemplate = (tpl) => {
+  let path;
 
-let renderTemplate = tpl => {
-    let path;
+  path = `${__dirname}/templates/${tpl}.html`;
+  if (fs.existsSync(path)) {
+    return mustache.render(file(path), {
+      text: renderHelpers.text(),
+    });
+  }
 
-    path = `${__dirname}/templates/${tpl}.html`;
-    if (fs.existsSync(path)) {
-        return mustache.render(file(path), {
-            text: renderHelpers.text(),
-        });
-    }
+  path = `${__dirname}/templates/${tpl}.js`;
+  if (fs.existsSync(path)) {
+    return require(path).render(renderHelpers);
+  }
 
-    path = `${__dirname}/templates/${tpl}.js`;
-    if (fs.existsSync(path)) {
-        return require(path).render(renderHelpers);
-    }
-
-    return `${tpl}=404`;
-
+  return `${tpl}=404`;
 };
 
-let renderDoc = content => mustache.render(
-    file(`${__dirname}/base.html`),
-    {content: content}
-);
-
+let renderDoc = (content) =>
+  mustache.render(file(`${__dirname}/base.html`), { content: content });
 
 //
 
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + "/public"));
 
-app.get('/only/:tpl', (req, res, next) => {
-    let content = req.params.tpl.split(',').map(renderTemplate).join('');
-    res.send(renderDoc(content));
+app.get("/only/:tpl", (req, res, next) => {
+  let content = req.params.tpl.split(",").map(renderTemplate).join("");
+  res.send(renderDoc(content));
 });
 
-app.get('/base', (req, res, next) => {
-    res.send(renderDoc(''));
+app.get("/base", (req, res, next) => {
+  res.send(renderDoc(""));
 });
 
-app.get('/frame', (req, res, next) => {
-    res.send(file(`${__dirname}/frame.html`));
+app.get("/frame", (req, res, next) => {
+  res.send(file(`${__dirname}/frame.html`));
 });
 
-app.get('/raw/:tpl', (req, res, next) => {
-    let content = req.params.tpl.split(',').map(renderTemplate).join('');
-    res.send(content);
+app.get("/raw/:tpl", (req, res, next) => {
+  let content = req.params.tpl.split(",").map(renderTemplate).join("");
+  res.send(content);
 });
 
+app.get("/all", (req, res, next) => {
+  let content = "",
+    all =
+      "simple spans numbers forms hidden framea nested scroll frameb styled frameset dynamic";
 
-app.get('/all', (req, res, next) => {
-    let content = '',
-        all = 'simple spans numbers forms hidden framea nested scroll frameb styled frameset dynamic';
+  all.split(" ").forEach((tpl) => {
+    content += `<h2>${tpl}</h2>`;
+    content += renderTemplate(tpl);
+    content += renderHelpers.text();
+  });
 
-    all.split(' ').forEach(tpl => {
-        content += `<h2>${tpl}</h2>`;
-        content += renderTemplate(tpl);
-        content += renderHelpers.text();
-    });
-
-    res.send(renderDoc(content));
+  res.send(renderDoc(content));
 });
 
 app.listen(9876);

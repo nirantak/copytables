@@ -1,4 +1,4 @@
-module.exports.render = h => `
+module.exports.render = (h) => `
     <style>
         #scroller {
             width: 300px;

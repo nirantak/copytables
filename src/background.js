@@ -1,3 +1,3 @@
-(function() {
-    require('./background/index').main();
+(function () {
+  require("./background/index").main();
 })();
