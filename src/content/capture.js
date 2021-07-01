@@ -11,6 +11,7 @@ var dom = require("../lib/dom"),
   infobox = require("./infobox"),
   table = require("./table"),
   scroller = require("./scroller");
+
 M.Capture = function () {
   this.anchorPoint = null;
   this.table = null;

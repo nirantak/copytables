@@ -7,6 +7,7 @@ var dom = require("../lib/dom"),
   cell = require("../lib/cell"),
   table = require("./table"),
   infobox = require("./infobox");
+
 function cellsToSelect(el, mode) {
   if (mode === "table") {
     var tbl = dom.closest(el, "table");

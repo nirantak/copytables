@@ -9,6 +9,7 @@ var message = require("../lib/message"),
   commands = require("./commands"),
   copy = require("./copy"),
   helpers = require("./helpers");
+
 var messageListeners = {
   dropAllSelections: function (msg) {
     message.allFrames("dropSelection");

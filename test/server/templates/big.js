@@ -45,18 +45,18 @@ module.exports.render = (h) => {
   });
 
   return `
-        <style>
-            .big table {
-                border-collapse: separate;
-                border-spacing: 10px;
-            }
-            .big td {
-                border: 1px solid salmon;
-                padding: 5px;
-        }
-        </style>
-        <div class="big">
-            <table>${rows.join("")}</table>
-        </div>
-    `;
+    <style>
+      .big table {
+        border-collapse: separate;
+        border-spacing: 10px;
+      }
+      .big td {
+        border: 1px solid salmon;
+        padding: 5px;
+      }
+    </style>
+    <div class="big">
+      <table>${rows.join("")}</table>
+    </div>
+  `;
 };

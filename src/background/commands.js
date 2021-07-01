@@ -6,6 +6,7 @@ var message = require("../lib/message"),
   menu = require("./menu"),
   copy = require("./copy"),
   helpers = require("./helpers");
+
 function findTableCommand(direction, sender) {
   console.log("findTableCommand", direction, sender);
 

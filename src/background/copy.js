@@ -5,6 +5,7 @@ var paste = require("./paste"),
   matrix = require("../lib/matrix"),
   util = require("../lib/util"),
   clipboard = require("./clipboard");
+
 function trimTextMatrix(mat) {
   mat = matrix.map(mat, function (row, cell) {
     return util.strip(util.nobr(cell));

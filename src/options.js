@@ -4,6 +4,7 @@ var dom = require("./lib/dom"),
   event = require("./lib/event"),
   message = require("./lib/message"),
   util = require("./lib/util");
+
 var mouseButtonNames = [
   "Left Button",
   "Middle/Wheel",

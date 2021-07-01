@@ -12,4 +12,4 @@ Chrome extension to select and copy table cells.
 - Copy as CSV or TSV (for Spreadsheets).
 - Copy as HTML (for your website).
 
-Forked from https://github.com/gebrkn/copytables for Chrome.
+Forked from [gebrkn/copytables](https://github.com/gebrkn/copytables) for Chrome.

@@ -13,6 +13,7 @@ var preferences = require("../lib/preferences"),
   selection = require("./selection"),
   table = require("./table"),
   loader = require("./loader");
+
 var mouseButton = 0,
   currentCapture = null;
 

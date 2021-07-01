@@ -2,6 +2,7 @@ var M = (module.exports = {});
 
 var dom = require("../lib/dom"),
   util = require("../lib/util");
+
 M.copyRich = function (text) {
   console.log(util.timeStart("copyRich"));
 

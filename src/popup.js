@@ -3,6 +3,7 @@ var dom = require("./lib/dom"),
   message = require("./lib/message"),
   event = require("./lib/event"),
   util = require("./lib/util");
+
 function captureButtons() {
   var mode = preferences.val("_captureMode") || "zzz";
 

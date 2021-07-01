@@ -6,6 +6,7 @@ var dom = require("../lib/dom"),
   cell = require("../lib/cell"),
   css = require("../lib/css"),
   clipboard = require("./clipboard");
+
 function toMatrix(tbl) {
   console.log(util.timeStart("toMatrix"));
 
