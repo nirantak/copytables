@@ -1,4 +1,4 @@
-# copytables
+# CopyTables
 
 ![Hey](https://raw.githubusercontent.com/nirantak/copytables/main/src/ico128.png)
 

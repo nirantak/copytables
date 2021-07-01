@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "description": "Select table cells, rows and columns with your mouse or from a context menu. Copy as rich text, HTML, tab-delimited and CSV.",
+  "description": "Select table cells, rows and columns with your mouse or from a context menu. Copy as rich text, HTML, CSV and TSV",
   "content_scripts": [
     {
       "js": ["content.js"],
@@ -30,7 +30,7 @@
       "19": "ico19.png",
       "38": "ico38.png"
     },
-    "default_title": "Copytables",
+    "default_title": "CopyTables",
     "default_popup": "popup.html"
   },
   "options_page": "options.html",
@@ -57,7 +57,7 @@
       "description": "Capture tables"
     }
   },
-  "name": "Copytables",
+  "name": "CopyTables",
   "version": "0.5.10",
-  "homepage_url": "https://merribithouse.net/copytables"
+  "homepage_url": "https://github.com/nirantak/copytables"
 }

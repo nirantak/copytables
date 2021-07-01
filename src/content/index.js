@@ -211,7 +211,7 @@ var messageListeners = {
   endCopyFailed: function () {
     if (copyLock) {
       // inform the user that copy/paste failed
-      console.error("Sorry, Copytables was unable to copy this table.");
+      console.error("Sorry, CopyTables was unable to copy this table.");
     }
     endCopy();
   },
