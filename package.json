@@ -6,10 +6,10 @@
   "license": "MIT",
   "homepage": "https://github.com/nirantak/copytables#readme",
   "scripts": {
-    "chrome": "'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --enable-logging=stderr --v=1 2>&1 | node read-log.js",
-    "dev": "NODE_ENV=dev gulp make",
-    "watch": "NODE_ENV=dev gulp watch --url",
     "dev-server": "node ./test/server/index.js",
+    "chrome": "'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --enable-logging=stderr --v=1 2>&1 | node read-log.js",
+    "watch": "NODE_ENV=dev gulp watch --url",
+    "dev": "NODE_ENV=dev gulp make",
     "production": "NODE_ENV=production gulp make",
     "deploy": "NODE_ENV=production gulp deploy",
     "test": "jasmine --config=./test/jasmine.json",
@@ -32,6 +32,7 @@
     "gulp-util": "^3.0.8",
     "jasmine": "^3.7.0",
     "mustache": "^4.2.0",
+    "node-sass": "^6.0.1",
     "prettier": "^2.3.2",
     "vinyl-named": "^1.1.0",
     "webpack-stream": "^6.1.2"

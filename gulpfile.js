@@ -1,6 +1,6 @@
 "use strict";
 
-var clip = require("gulp-clip-empty-files"),
+const clip = require("gulp-clip-empty-files"),
   cp = require("child_process"),
   del = require("del"),
   fs = require("fs"),
@@ -75,17 +75,20 @@ gulp.task("clean", function () {
   return del.sync(DEST);
 });
 
-gulp.task("make", ["clean", "pug", "sass", "copy", "js"]);
+gulp.task("make", function (done) {
+  gulp.series("clean", "pug", "sass", "copy", "js");
+  done();
+});
 
-gulp.task("reload", ["make"], function () {
+gulp.task("reload", gulp.series("make"), function () {
   cp.execSync("osascript -l JavaScript ./reload-chrome.js");
 });
 
-gulp.task("watch", ["reload"], function () {
+gulp.task("watch", gulp.series("reload"), function () {
   return gulp.watch("./src/**/*", ["reload"]);
 });
 
-gulp.task("deploy", ["make"], function () {
+gulp.task("deploy", gulp.series("make"), function () {
   var m = require("./src/manifest.json"),
     fn = "copytables_" + m.version.replace(/\./g, "_") + ".zip";
   cp.execSync("rm -f ./" + fn + " && zip -j ./" + fn + " ./app/*");
