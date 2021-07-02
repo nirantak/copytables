@@ -8,30 +8,30 @@ const clip = require("gulp-clip-empty-files"),
   named = require("vinyl-named"),
   pug = require("gulp-pug"),
   path = require("path"),
-  rename = require("gulp-rename"),
-  sass = require("gulp-sass"),
+  sass = require("gulp-sass")(require("node-sass")),
   sassTypes = require("node-sass").types,
   webpack = require("webpack-stream"),
   uglify = require("gulp-uglify"),
   util = require("gulp-util");
 const DEST = "./app";
 const TEST_URL = "http://localhost:9876/all";
-const IS_DEV = process.env.NODE_ENV === "dev";
+const IS_DEV = process.env.NODE_ENV === "development";
 
 // based on https://coderwall.com/p/fhgu_q/inlining-images-with-gulp-sass
 function sassInlineImage(file) {
   var filePath = path.resolve(process.cwd(), file.getValue()),
     ext = filePath.split(".").pop(),
     data = fs.readFileSync(filePath),
-    buffer = new Buffer(data),
+    buffer = Buffer.from(data),
     str = '"data:image/' + ext + ";base64," + buffer.toString("base64") + '"';
   return sassTypes.String(str);
 }
 
 const webpackConfig = {
-  devtool: null,
+  mode: IS_DEV ? "development" : "production",
+  devtool: false,
   module: {
-    preLoaders: [
+    rules: [
       {
         test: /\.js$/,
         loader: __dirname + "/convert-logs?" + (IS_DEV ? "dev" : ""),
@@ -71,25 +71,23 @@ gulp.task("copy", function () {
   return gulp.src("./src/*.{png,css,json,svg}").pipe(gulp.dest(DEST));
 });
 
-gulp.task("clean", function () {
-  return del.sync(DEST);
-});
-
-gulp.task("make", function (done) {
-  gulp.series("clean", "pug", "sass", "copy", "js");
+gulp.task("clean", function (done) {
+  del.sync(DEST);
   done();
 });
 
-gulp.task("reload", gulp.series("make"), function () {
-  cp.execSync("osascript -l JavaScript ./reload-chrome.js");
-});
-
-gulp.task("watch", gulp.series("reload"), function () {
-  return gulp.watch("./src/**/*", ["reload"]);
-});
-
-gulp.task("deploy", gulp.series("make"), function () {
-  var m = require("./src/manifest.json"),
+gulp.task("zip", function (done) {
+  const m = require("./src/manifest.json"),
     fn = "copytables_" + m.version.replace(/\./g, "_") + ".zip";
-  cp.execSync("rm -f ./" + fn + " && zip -j ./" + fn + " ./app/*");
+
+  cp.execSync(`rm -f ./${fn} && zip -j ./${fn} ./app/*`);
+  done();
 });
+
+gulp.task("make", gulp.series("clean", "pug", "sass", "copy", "js"));
+
+gulp.task("watch", function () {
+  gulp.watch("./src/**/*", gulp.series("make"));
+});
+
+gulp.task("deploy", gulp.series("make", "zip"));
