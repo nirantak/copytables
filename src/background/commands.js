@@ -123,9 +123,5 @@ M.exec = function (cmd, sender) {
       return findTableCommand(-1, sender);
     case "open_options":
       return util.callChrome("runtime.openOptionsPage");
-    case "open_commands":
-      return util.callChrome("tabs.create", {
-        url: "chrome://extensions/configureCommands",
-      });
   }
 };
