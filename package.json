@@ -1,6 +1,6 @@
 {
   "name": "copytables",
-  "version": "0.5.10",
+  "version": "0.1.0",
   "description": "Chrome extension to select and copy table cells.",
   "author": "Nirantak Raghav",
   "license": "MIT",
