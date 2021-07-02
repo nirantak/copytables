@@ -122,6 +122,6 @@ M.exec = function (cmd, sender) {
     case "find_previous":
       return findTableCommand(-1, sender);
     case "open_options":
-      return util.callChrome("runtime.openOptionsPage");
+      return util.callBrowser("runtime.openOptionsPage");
   }
 };

@@ -14,8 +14,8 @@ M.updateUI = function () {
 };
 
 M.setBadge = function (s) {
-  util.callChrome("browserAction.setBadgeText", { text: s });
-  util.callChrome("browserAction.setBadgeBackgroundColor", {
+  util.callBrowser("browserAction.setBadgeText", { text: s });
+  util.callBrowser("browserAction.setBadgeBackgroundColor", {
     color: badgeColor,
   });
 };

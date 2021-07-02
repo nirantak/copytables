@@ -81,30 +81,30 @@ M.timeEnd = function (name) {
   }
 };
 
-function callChrome(useAsync, fn, args) {
+function callBrowser(useAsync, fn, args) {
   var parts = fn.split("."),
-    obj = chrome,
+    obj = browser,
     method = parts.pop();
 
   parts.forEach(function (p) {
     obj = obj[p];
   });
 
-  console.log("CALL_CHROME", useAsync, fn);
+  console.log("CALL_BROWSER", useAsync, fn);
 
   if (!useAsync) {
     try {
       return obj[method].apply(obj, args);
     } catch (err) {
-      console.log("CALL_CHROME_ERROR", fn, err.message);
+      console.log("CALL_BROWSER_ERROR", fn, err.message);
       return null;
     }
   }
   return new Promise(function (resolve, reject) {
     function callback(res) {
-      var err = chrome.runtime.lastError;
+      var err = browser.runtime.lastError;
       if (err) {
-        console.log("CALL_CHROME_LAST_ERROR", fn, err);
+        console.log("CALL_BROWSER_LAST_ERROR", fn, err);
         resolve(null);
       } else {
         resolve(res);
@@ -114,16 +114,16 @@ function callChrome(useAsync, fn, args) {
     try {
       obj[method].apply(obj, args.concat(callback));
     } catch (err) {
-      console.log("CALL_CHROME_ERROR", fn, err.message);
+      console.log("CALL_BROWSER_ERROR", fn, err.message);
       resolve(null);
     }
   });
 }
 
-M.callChrome = function (fn) {
-  return callChrome(false, fn, [].slice.call(arguments, 1));
+M.callBrowser = function (fn) {
+  return callBrowser(false, fn, [].slice.call(arguments, 1));
 };
 
-M.callChromeAsync = function (fn) {
-  return callChrome(true, fn, [].slice.call(arguments, 1));
+M.callBrowserAsync = function (fn) {
+  return callBrowser(true, fn, [].slice.call(arguments, 1));
 };

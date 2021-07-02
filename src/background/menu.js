@@ -79,7 +79,7 @@ function createMenu(menu, parent) {
     });
   }
 
-  var mobj = util.callChrome("contextMenus.create", desc);
+  var mobj = util.callBrowser("contextMenus.create", desc);
 
   if (sub) {
     sub.forEach(function (subMenu) {
@@ -91,20 +91,20 @@ function createMenu(menu, parent) {
 }
 
 M.create = function () {
-  util.callChromeAsync("contextMenus.removeAll").then(function () {
+  util.callBrowserAsync("contextMenus.removeAll").then(function () {
     createMenu(mainMenu);
   });
 };
 
 M.enable = function (ids, enabled) {
   ids.forEach(function (id) {
-    util.callChrome("contextMenus.update", id, { enabled: enabled });
+    util.callBrowser("contextMenus.update", id, { enabled: enabled });
     if (id === "copy") {
       var cf = preferences.copyFormats().filter(function (f) {
         return f.enabled;
       });
       cf.forEach(function (f) {
-        util.callChrome("contextMenus.update", "copy_" + f.id, {
+        util.callBrowser("contextMenus.update", "copy_" + f.id, {
           enabled: enabled,
         });
       });

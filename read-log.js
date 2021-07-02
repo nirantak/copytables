@@ -7,7 +7,7 @@ function proc(line) {
 
   var url = data.shift();
 
-  if (url.match(/^chrome-extension/)) url = "";
+  if (url.match(/^moz-extension/)) url = "";
 
   var file = data.shift();
   var line = data.shift();
