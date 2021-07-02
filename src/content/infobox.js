@@ -1,163 +1,158 @@
 /// Display diverse functions when dragging over a table
 
-var M = module.exports = {};
+var M = (module.exports = {});
 
-var cell = require('../lib/cell'),
-    dom = require('../lib/dom'),
-    event = require('../lib/event'),
-    preferences = require('../lib/preferences'),
-    number = require('../lib/number');
-
+var cell = require("../lib/cell"),
+  dom = require("../lib/dom"),
+  event = require("../lib/event"),
+  preferences = require("../lib/preferences"),
+  number = require("../lib/number");
 
 function getValue(td, fmt) {
-    var val = {text: '', number: 0, isNumber: false};
+  var val = { text: "", number: 0, isNumber: false };
 
-    dom.textContentItems(td).some(function (t) {
-        var n = number.extract(t, fmt);
-        if (n !== null) {
-            return val = {text: t, number: n, isNumber: true};
-        }
-    });
+  dom.textContentItems(td).some(function (t) {
+    var n = number.extract(t, fmt);
+    if (n !== null) {
+      return (val = { text: t, number: n, isNumber: true });
+    }
+  });
 
-    return val;
+  return val;
 }
 
 function data(tbl) {
-    if (!tbl) {
-        return null;
-    }
+  if (!tbl) {
+    return null;
+  }
 
-    var cells = cell.findSelected(tbl);
+  var cells = cell.findSelected(tbl);
 
-    if (!cells || !cells.length) {
-        return null;
-    }
+  if (!cells || !cells.length) {
+    return null;
+  }
 
-    var fmt = preferences.numberFormat();
-    var values = [];
+  var fmt = preferences.numberFormat();
+  var values = [];
 
-    cells.forEach(function (td) {
-        values.push(getValue(td, fmt));
-    });
+  cells.forEach(function (td) {
+    values.push(getValue(td, fmt));
+  });
 
-    return preferences.infoFunctions().map(function (f) {
-        return {
-            title: f.name + ':',
-            message: f.fn(values)
-        }
-    });
-};
+  return preferences.infoFunctions().map(function (f) {
+    return {
+      title: f.name + ":",
+      message: f.fn(values),
+    };
+  });
+}
 
-var
-    boxId = '__copytables_infobox__',
-    pendingContent = null,
-    timer = 0,
-    freq = 500;
+var boxId = "__copytables_infobox__",
+  pendingContent = null,
+  timer = 0,
+  freq = 500;
 
 function getBox() {
-    return dom.findOne('#' + boxId);
+  return dom.findOne("#" + boxId);
 }
 
 function setTimer() {
-    if (!timer)
-        timer = setInterval(draw, freq);
+  if (!timer) timer = setInterval(draw, freq);
 }
 
 function clearTimer() {
-    clearInterval(timer);
-    timer = 0;
+  clearInterval(timer);
+  timer = 0;
 }
 
 function html(items, sticky) {
-    var h = [];
+  var h = [];
 
-    items.forEach(function (item) {
-        if (item.message !== null)
-            h.push(' <b>' + item.title + '<i>' + item.message + '</i></b>');
-    });
+  items.forEach(function (item) {
+    if (item.message !== null)
+      h.push(" <b>" + item.title + "<i>" + item.message + "</i></b>");
+  });
 
-    h = h.join('');
+  h = h.join("");
 
-    if (sticky) {
-        h += '<span>&times;</span>';
-    } else {
-        h += '<b></b>';
-    }
+  if (sticky) {
+    h += "<span>&times;</span>";
+  } else {
+    h += "<b></b>";
+  }
 
-    return h;
+  return h;
 }
 
 function init() {
-    var box = dom.create('div', {
-        id: boxId,
-        'data-position': preferences.val('infobox.position') || '0'
-    });
-    document.body.appendChild(box);
+  var box = dom.create("div", {
+    id: boxId,
+    "data-position": preferences.val("infobox.position") || "0",
+  });
+  document.body.appendChild(box);
 
-    box.addEventListener('click', function (e) {
-        if (dom.tag(e.target) === 'SPAN')
-            hide();
-    });
+  box.addEventListener("click", function (e) {
+    if (dom.tag(e.target) === "SPAN") hide();
+  });
 
-    return box;
+  return box;
 }
 
 function draw() {
-    if (!pendingContent) {
-        //console.log('no pendingContent');
-        clearTimer();
-        return;
-    }
+  if (!pendingContent) {
+    //console.log('no pendingContent');
+    clearTimer();
+    return;
+  }
 
-    if (pendingContent === 'hide') {
-        //console.log('removed');
-        dom.remove([getBox()]);
-        clearTimer();
-        return;
-    }
+  if (pendingContent === "hide") {
+    //console.log('removed');
+    dom.remove([getBox()]);
+    clearTimer();
+    return;
+  }
 
-    var box = getBox() || init();
+  var box = getBox() || init();
 
-    dom.removeClass(box, 'hidden');
-    box.innerHTML = pendingContent;
+  dom.removeClass(box, "hidden");
+  box.innerHTML = pendingContent;
 
-    pendingContent = null;
-    //console.log('drawn');
+  pendingContent = null;
+  //console.log('drawn');
 }
 
 function show(items) {
-    var p = html(items, preferences.val('infobox.sticky'));
+  var p = html(items, preferences.val("infobox.sticky"));
 
-    if (p === pendingContent) {
-        //console.log('same content');
-        return;
-    }
+  if (p === pendingContent) {
+    //console.log('same content');
+    return;
+  }
 
-    if (pendingContent) {
-        //console.log('queued');
-    }
+  if (pendingContent) {
+    //console.log('queued');
+  }
 
-    pendingContent = p;
-    setTimer();
+  pendingContent = p;
+  setTimer();
 }
 
 function hide() {
-    //console.log('about to remove...');
-    pendingContent = 'hide';
-    dom.addClass(getBox(), 'hidden');
-    setTimer();
+  //console.log('about to remove...');
+  pendingContent = "hide";
+  dom.addClass(getBox(), "hidden");
+  setTimer();
 }
 
 M.update = function (tbl) {
-    if (preferences.val('infobox.enabled')) {
-        var d = data(tbl);
-        if (d && d.length)
-            show(d);
-    }
+  if (preferences.val("infobox.enabled")) {
+    var d = data(tbl);
+    if (d && d.length) show(d);
+  }
 };
 
 M.remove = function () {
-    if (!preferences.val('infobox.sticky')) {
-        hide();
-    }
+  if (!preferences.val("infobox.sticky")) {
+    hide();
+  }
 };

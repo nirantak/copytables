@@ -1,3 +1,3 @@
 (function () {
-    require('./content/index').main();
+  require("./content/index").main();
 })();

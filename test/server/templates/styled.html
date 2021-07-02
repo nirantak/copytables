@@ -1,80 +1,84 @@
 <style>
-    .table1 td {
-        border: 2px solid bisque;
-        padding: 1.7em;
-    }
+  .table1 td {
+    border: 2px solid bisque;
+    padding: 1.7em;
+  }
 
-    .tdclass1 {
-        background: thistle;
-        color: blue;
-        font-style: italic;
-    }
+  .tdclass1 {
+    background: thistle;
+    color: blue;
+    font-style: italic;
+  }
 
-    .tdclass2 {
-        background-image: url('/img/b.png');
-        color: cyan;
-        font-size: 2.1em;
-    }
+  .tdclass2 {
+    background-image: url("/img/b.png");
+    color: cyan;
+    font-size: 2.1em;
+  }
 
-    .tdclass3 {
-        background: url('https://upload.wikimedia.org/wikipedia/en/e/ee/Russian_blue_head_sm.jpg');
-    }
+  .tdclass3 {
+    background: url("https://upload.wikimedia.org/wikipedia/en/e/ee/Russian_blue_head_sm.jpg");
+  }
 
-    .animated_td {
-        transition: all 1s;
-        background: cadetblue;
+  .animated_td {
+    transition: all 1s;
+    background: cadetblue;
+  }
 
-    }
+  .animated_tr td {
+    transition: all 1s;
+    background: cornsilk;
+  }
 
-    .animated_tr td {
-        transition: all 1s;
-        background: cornsilk;
+  .unselect1 {
+    user-select: none;
+  }
 
-    }
-
-    .unselect1 {
-        user-select: none;
-    }
-
-    .unselect2 {
-        -webkit-user-select: none;
-    }
-
+  .unselect2 {
+    -webkit-user-select: none;
+  }
 </style>
 
-
 <table class="table1">
-    <tr>
-        <td>default style</td>
-        <td class="tdclass1">class 1 style</td>
-        <td class="tdclass2">class 2 style</td>
-        <td style="font-size: 16px; font-weight: bold">inline style</td>
-    </tr>
-    <tr>
-        <td class="tdclass2" style="font-size: 16px; font-weight: bold">class 2 + inline</td>
-        <td class="tdclass3">external background</td>
-        <td style="background: url(&quot;https://upload.wikimedia.org/wikipedia/en/8/83/Young_Male_CFA_Kitten_-_Age_2_Months.jpg&quot;)">external background - inline</td>
-    </tr>
-    <tr>
-        <td class="animated_td">td animated</td>
-    </tr>
-    <tr class="animated_tr">
-        <td>tr animated</td>
-        <td>tr animated</td>
-        <td>tr animated</td>
-        <td>tr animated</td>
-    </tr>
-    <tr>
-        <td class="unselect1">TD = NOT SELECTABLE</td>
-        <td class="unselect2">TD = NOT SELECTABLE</td>
-    </tr>
+  <tr>
+    <td>default style</td>
+    <td class="tdclass1">class 1 style</td>
+    <td class="tdclass2">class 2 style</td>
+    <td style="font-size: 16px; font-weight: bold">inline style</td>
+  </tr>
+  <tr>
+    <td class="tdclass2" style="font-size: 16px; font-weight: bold">
+      class 2 + inline
+    </td>
+    <td class="tdclass3">external background</td>
+    <td
+      style="
+        background: url('https://upload.wikimedia.org/wikipedia/en/8/83/Young_Male_CFA_Kitten_-_Age_2_Months.jpg');
+      "
+    >
+      external background - inline
+    </td>
+  </tr>
+  <tr>
+    <td class="animated_td">td animated</td>
+  </tr>
+  <tr class="animated_tr">
+    <td>tr animated</td>
+    <td>tr animated</td>
+    <td>tr animated</td>
+    <td>tr animated</td>
+  </tr>
+  <tr>
+    <td class="unselect1">TD = NOT SELECTABLE</td>
+    <td class="unselect2">TD = NOT SELECTABLE</td>
+  </tr>
 </table>
 
 <table class="unselect1">
-    <tr>
-        <td>TABLE = NOT SELECTABLE</td>
-        <td>TABLE = NOT SELECTABLE</td>
-    </tr>
+  <tr>
+    <td>TABLE = NOT SELECTABLE</td>
+    <td>TABLE = NOT SELECTABLE</td>
+  </tr>
 </table>
 
 {{{text}}}
