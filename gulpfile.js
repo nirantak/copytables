@@ -86,7 +86,7 @@ gulp.task("zip", function (done) {
 
 gulp.task("make", gulp.series("clean", "pug", "sass", "copy", "js"));
 
-gulp.task("watch", function () {
+gulp.task("watch", gulp.series("make"), function () {
   gulp.watch("./src/**/*", gulp.series("make"));
 });
 

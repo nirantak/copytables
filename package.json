@@ -7,22 +7,23 @@
   "homepage": "https://github.com/nirantak/copytables",
   "scripts": {
     "server": "node ./test/server/index.js",
-    "watch": "NODE_ENV=development gulp watch --url",
+    "watch": "NODE_ENV=development gulp watch",
+    "ext": "web-ext run -s ./app -u http://localhost:9876/all",
+    "start": "concurrently 'npm:watch' 'npm:server' 'npm:ext'",
     "clean": "rm -rf ./app ./copytables*.zip",
     "dev": "NODE_ENV=development gulp make",
     "prod": "NODE_ENV=production gulp make",
     "deploy": "NODE_ENV=production gulp deploy",
     "test": "jasmine --config=./test/jasmine.json",
+    "lint": "web-ext lint -s ./app",
     "format": "prettier --write '!app/**/*' '**/*.{js,scss,html,json}'"
   },
   "engines": {
     "node": "16.4.1",
     "npm": "7.19.1"
   },
-  "devDependencies": {
+  "dependencies": {
     "del": "^6.0.0",
-    "express": "^4.17.1",
-    "glob": "^7.1.7",
     "gulp": "^4.0.2",
     "gulp-clip-empty-files": "^0.1.2",
     "gulp-pug": "^5.0.0",
@@ -30,12 +31,18 @@
     "gulp-sass": "^5.0.0",
     "gulp-uglify": "^3.0.2",
     "gulp-util": "^3.0.8",
-    "jasmine": "^3.7.0",
-    "mustache": "^4.2.0",
     "node-sass": "^6.0.1",
-    "prettier": "^2.3.2",
     "vinyl-named": "^1.1.0",
     "webpack-stream": "^6.1.2"
+  },
+  "devDependencies": {
+    "concurrently": "^6.2.0",
+    "express": "^4.17.1",
+    "glob": "^7.1.7",
+    "jasmine": "^3.7.0",
+    "mustache": "^4.2.0",
+    "prettier": "^2.3.2",
+    "web-ext": "^6.2.0"
   },
   "repository": {
     "type": "git",
