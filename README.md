@@ -22,14 +22,15 @@ Requirements: `node` v16.4.1 (`npm` v7.19.1)
 
 ```bash
 # Clone the repo
-git clone git@github.com:nirantak/copytables.git
+git clone https://github.com/nirantak/copytables.git
 cd copytables
 
 # Install dependencies
 npm install
 
-# Build zipped extension (copytables_0_1_0.zip)
+# Build zipped extension
 npm run deploy
+## Output: copytables_0_1_0.zip (build tested on macOS 11.4)
 
 # Test in development mode
 npm start
