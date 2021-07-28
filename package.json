@@ -19,8 +19,8 @@
     "format": "prettier --write '!app/**/*' '**/*.{js,scss,html,json}'"
   },
   "engines": {
-    "node": "16.4.1",
-    "npm": "7.19.1"
+    "node": "16.5.0",
+    "npm": "7.20.2"
   },
   "dependencies": {
     "del": "^6.0.0",
@@ -39,7 +39,7 @@
     "concurrently": "^6.2.0",
     "express": "^4.17.1",
     "glob": "^7.1.7",
-    "jasmine": "^3.7.0",
+    "jasmine": "^3.8.0",
     "mustache": "^4.2.0",
     "prettier": "^2.3.2",
     "web-ext": "^6.2.0"
