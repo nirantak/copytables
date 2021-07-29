@@ -30,7 +30,7 @@ npm install
 
 # Build zipped extension
 npm run deploy
-## Output: copytables_0_1_0.zip
+## Output: copytables-0.1.0.zip
 
 # Test in development mode
 npm start

@@ -78,7 +78,7 @@ gulp.task("clean", function (done) {
 
 gulp.task("zip", function (done) {
   const m = require("./src/manifest.json"),
-    fn = "copytables_" + m.version.replace(/\./g, "_") + ".zip";
+    fn = `copytables-${m.version}.zip`;
 
   cp.execSync(`rm -f ./${fn} && zip -j ./${fn} ./app/*`);
   done();
