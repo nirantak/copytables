@@ -1,4 +1,4 @@
-/// Wrappers for browser...sendMessage
+/// Wrappers for browser.sendMessage
 
 var M = (module.exports = {});
 

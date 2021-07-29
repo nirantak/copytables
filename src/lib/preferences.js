@@ -1,4 +1,4 @@
-// Preferences, stored in browser.storage
+/// Preferences, stored in browser.storage
 
 var M = (module.exports = {});
 

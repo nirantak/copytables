@@ -16,11 +16,14 @@ mixin modifiers(mode)
   +modifier(1 << 13, mode)
 
 doctype html
-html
+html(lang="en")
   head
     title CopyTables Options
+    meta(charset="utf-8")
+    meta(http-equiv="Content-type", content="text/html; charset=utf-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
     script(src="options.js")
-    link(rel="stylesheet" type="text/css" href="options.css")
+    link(rel="stylesheet", type="text/css", href="options.css")
 
   body
 
