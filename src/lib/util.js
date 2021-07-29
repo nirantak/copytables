@@ -100,19 +100,18 @@ function callBrowser(useAsync, fn, args) {
       return null;
     }
   }
-  return new Promise(function (resolve, reject) {
-    function callback(res) {
-      var err = browser.runtime.lastError;
-      if (err) {
-        console.log("CALL_BROWSER_LAST_ERROR", fn, err);
-        resolve(null);
-      } else {
-        resolve(res);
-      }
-    }
 
+  return new Promise(function (resolve, reject) {
     try {
-      obj[method].apply(obj, args.concat(callback));
+      obj[method].apply(obj, args).then(
+        function (res) {
+          resolve(res);
+        },
+        function (err) {
+          console.log("CALL_BROWSER_LAST_ERROR", fn, err);
+          resolve(null);
+        }
+      );
     } catch (err) {
       console.log("CALL_BROWSER_ERROR", fn, err.message);
       resolve(null);
