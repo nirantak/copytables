@@ -5,6 +5,7 @@
   "author": "Nirantak Raghav",
   "license": "MIT",
   "homepage": "https://github.com/nirantak/copytables",
+  "private": true,
   "scripts": {
     "server": "node ./test/server/index.js",
     "watch": "NODE_ENV=development gulp watch",
