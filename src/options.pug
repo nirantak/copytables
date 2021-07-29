@@ -16,17 +16,20 @@ mixin modifiers(mode)
   +modifier(1 << 13, mode)
 
 doctype html
-html
+html(lang="en")
   head
     title CopyTables Options
+    meta(charset="utf-8")
+    meta(http-equiv="Content-type", content="text/html; charset=utf-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
     script(src="options.js")
-    link(rel="stylesheet" type="text/css" href="options.css")
+    link(rel="stylesheet", type="text/css", href="options.css")
 
   body
 
-    h1 CopyTables options
+    h1 CopyTables Options
 
-    h2 Modifier keys
+    h2 Modifier Keys
     h3
       | Configure modifier keys for click-and-drag selection.
       | Note: some combinations might conflict with your system setup.
@@ -55,7 +58,7 @@ html
           td(data-modifiers="extend")
 
 
-    h2 Capture mode
+    h2 Capture Mode
     h3
       | In the capture mode, you press a hot key first and then select with a single click.
 
@@ -76,13 +79,12 @@ html
               input(type="checkbox" data-bool="capture.reset")
               span Yes
         tr
-          td: b Keyboard shortcuts
-          td
-            a(href="#" data-command="open_commands") Configure
+          td: b Keyboard Shortcuts
+          td Configure by going to <em><a href="about:addons">about:addons</a></em> &rarr; Tools &rarr; Manage Extension Shortcuts
 
 
-    h2 Copy formats
-    h3 Select copy formats you want to use. "Default" format is used when you select "Copy" from the Chrome menu.
+    h2 Copy Formats
+    h3 Select copy formats you want to use. "Default" format is used when you select "Copy" from the Firefox menu.
 
     .box#copy-formats
 
@@ -168,8 +170,6 @@ html
         <a href="mailto:hey@nirantak.com">Contact me</a> if you have questions or want to report a problem.
 
       h4
-        a(href="https://github.com/nirantak/copytables") About
+        a(href="https://github.com/nirantak/copytables") Source Code
         | &nbsp;|&nbsp;
-        a(href="https://github.com/nirantak/copytables") Source code
-        | &nbsp;|&nbsp;
-        | &copy; 2021~present Nirantak Raghav
+        | &copy; 2021-present Nirantak Raghav

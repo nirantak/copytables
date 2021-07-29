@@ -1,4 +1,4 @@
-/// Wrappers for chrome...sendMessage
+/// Wrappers for browser.sendMessage
 
 var M = (module.exports = {});
 
@@ -32,7 +32,7 @@ function convertSender(sender) {
 
 function toBackground(msg) {
   msg.to = "background";
-  return util.callChromeAsync("runtime.sendMessage", msg).then(function (res) {
+  return util.callBrowserAsync("runtime.sendMessage", msg).then(function (res) {
     return { receiver: "background", data: res };
   });
 }
@@ -40,7 +40,7 @@ function toBackground(msg) {
 function toFrame(msg, frame) {
   msg.to = frame;
   return util
-    .callChromeAsync("tabs.sendMessage", frame.tabId, msg, {
+    .callBrowserAsync("tabs.sendMessage", frame.tabId, msg, {
       frameId: frame.frameId,
     })
     .then(function (res) {
@@ -59,7 +59,7 @@ function toFrameList(msg, frames) {
 M.enumFrames = function (tabFilter) {
   function framesInTab(tab) {
     return util
-      .callChromeAsync("webNavigation.getAllFrames", { tabId: tab.id })
+      .callBrowserAsync("webNavigation.getAllFrames", { tabId: tab.id })
       .then(function (frames) {
         if (!frames) {
           // Vivaldi, as of 1.8.770.56, doesn't support getAllFrames() properly
@@ -84,7 +84,7 @@ M.enumFrames = function (tabFilter) {
   }
 
   return util
-    .callChromeAsync("tabs.query", tabFilter || {})
+    .callBrowserAsync("tabs.query", tabFilter || {})
     .then(function (tabs) {
       return Promise.all(tabs.map(framesInTab));
     })
@@ -133,7 +133,7 @@ M.broadcast = function (msg) {
 };
 
 M.listen = function (listeners) {
-  util.callChrome("runtime.onMessage.addListener", function (msg, sender, fn) {
+  util.callBrowser("runtime.onMessage.addListener", function (msg, sender, fn) {
     if (listeners[msg.name]) {
       msg.sender = convertSender(sender);
       var res = listeners[msg.name](msg);

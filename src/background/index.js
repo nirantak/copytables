@@ -55,11 +55,11 @@ function init() {
   menu.create();
   message.listen(messageListeners);
 
-  util.callChrome("contextMenus.onClicked.addListener", function (info, tab) {
+  util.callBrowser("contextMenus.onClicked.addListener", function (info, tab) {
     commands.exec(info.menuItemId, { tabId: tab.id, frameId: info.frameId });
   });
 
-  util.callChrome("commands.onCommand.addListener", function (cmd) {
+  util.callBrowser("commands.onCommand.addListener", function (cmd) {
     commands.exec(cmd, null);
   });
 

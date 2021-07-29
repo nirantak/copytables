@@ -122,10 +122,6 @@ M.exec = function (cmd, sender) {
     case "find_previous":
       return findTableCommand(-1, sender);
     case "open_options":
-      return util.callChrome("runtime.openOptionsPage");
-    case "open_commands":
-      return util.callChrome("tabs.create", {
-        url: "chrome://extensions/configureCommands",
-      });
+      return util.callBrowser("runtime.openOptionsPage");
   }
 };

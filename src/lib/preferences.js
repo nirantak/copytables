@@ -1,4 +1,4 @@
-// Preferences, stored in chrome.storage
+/// Preferences, stored in browser.storage
 
 var M = (module.exports = {});
 
@@ -175,7 +175,7 @@ function _constrain(min, val, max) {
 }
 
 M.load = function () {
-  return util.callChromeAsync("storage.local.get", null).then(function (obj) {
+  return util.callBrowserAsync("storage.local.get", null).then(function (obj) {
     obj = obj || {};
 
     // from the previous version
@@ -209,9 +209,9 @@ M.load = function () {
 
 M.save = function () {
   return util
-    .callChromeAsync("storage.local.clear")
+    .callBrowserAsync("storage.local.clear")
     .then(function () {
-      return util.callChromeAsync("storage.local.set", prefs);
+      return util.callBrowserAsync("storage.local.set", prefs);
     })
     .then(function () {
       console.log("PREFS SET", prefs);

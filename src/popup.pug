@@ -1,8 +1,9 @@
 doctype html
-html
+html(lang="en")
   head
+    meta(charset="utf-8")
     script(src="popup.js")
-    link(rel="stylesheet" type="text/css" href="popup.css")
+    link(rel="stylesheet", type="text/css", href="popup.css")
 
   body
     table
@@ -28,5 +29,3 @@ html
     div
       p
         a(data-command="open_options") Options
-      p
-        a(data-command="open_commands") Keyboard shortcuts

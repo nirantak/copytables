@@ -40,13 +40,8 @@ const webpackConfig = {
   },
 };
 
-gulp.task("js", function () {
-  return gulp
-    .src("./src/*.js")
-    .pipe(named())
-    .pipe(webpack(webpackConfig))
-    .pipe(IS_DEV ? util.noop() : uglify())
-    .pipe(gulp.dest(DEST));
+gulp.task("pug", function () {
+  return gulp.src("./src/*.pug").pipe(pug()).pipe(gulp.dest(DEST));
 });
 
 gulp.task("sass", function () {
@@ -63,12 +58,17 @@ gulp.task("sass", function () {
     .pipe(gulp.dest(DEST));
 });
 
-gulp.task("pug", function () {
-  return gulp.src("./src/*.pug").pipe(pug()).pipe(gulp.dest(DEST));
-});
-
 gulp.task("copy", function () {
   return gulp.src("./src/*.{png,css,json,svg}").pipe(gulp.dest(DEST));
+});
+
+gulp.task("js", function () {
+  return gulp
+    .src("./src/*.js")
+    .pipe(named())
+    .pipe(webpack(webpackConfig))
+    .pipe(IS_DEV ? util.noop() : uglify())
+    .pipe(gulp.dest(DEST));
 });
 
 gulp.task("clean", function (done) {
@@ -78,16 +78,16 @@ gulp.task("clean", function (done) {
 
 gulp.task("zip", function (done) {
   const m = require("./src/manifest.json"),
-    fn = "copytables_" + m.version.replace(/\./g, "_") + ".zip";
+    fn = `copytables-${m.version}.zip`;
 
   cp.execSync(`rm -f ./${fn} && zip -j ./${fn} ./app/*`);
   done();
 });
 
-gulp.task("make", gulp.series("clean", "pug", "sass", "copy", "js"));
+gulp.task("make", gulp.parallel("pug", "sass", "copy", "js"));
+gulp.task("build", gulp.series("clean", "make"));
+gulp.task("deploy", gulp.series("build", "zip"));
 
 gulp.task("watch", function () {
   gulp.watch("./src/**/*", gulp.series("make"));
 });
-
-gulp.task("deploy", gulp.series("make", "zip"));
