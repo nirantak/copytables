@@ -4,7 +4,7 @@
 
 Firefox extension to select and copy table cells.
 
-[Install for Firefox](https://addons.mozilla.org/)
+[Install for Firefox](https://addons.mozilla.org/firefox/addon/copywebtables/)
 
 ## Usage
 
@@ -18,7 +18,7 @@ Forked from [gebrkn/copytables](https://github.com/gebrkn/copytables) for Chrome
 
 ## Building the Extension
 
-Build tested using: `node` v16.5.0 (`npm` v7.20.2) on macOS 11.4
+Build tested using: `node` v16.6.0 (`npm` v7.20.3) on macOS 11.5.1
 
 ```bash
 # Clone the repo
