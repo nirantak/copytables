@@ -20,8 +20,8 @@
     "format": "prettier --write '!app/**/*' '**/*.{js,scss,html,json}'"
   },
   "engines": {
-    "node": "16.6.0",
-    "npm": "7.20.3"
+    "node": "16.6.1",
+    "npm": "7.20.5"
   },
   "dependencies": {
     "del": "^6.0.0",
@@ -37,7 +37,7 @@
     "webpack-stream": "^6.1.2"
   },
   "devDependencies": {
-    "concurrently": "^6.2.0",
+    "concurrently": "^6.2.1",
     "express": "^4.17.1",
     "glob": "^7.1.7",
     "jasmine": "^3.8.0",

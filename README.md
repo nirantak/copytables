@@ -18,7 +18,7 @@ Forked from [gebrkn/copytables](https://github.com/gebrkn/copytables) for Chrome
 
 ## Building the Extension
 
-Build tested using: `node` v16.6.0 (`npm` v7.20.3) on macOS 11.5.1
+Build tested using: `node` v16.6.1 (`npm` v7.20.5) on macOS 11.5.1
 
 ```bash
 # Clone the repo
