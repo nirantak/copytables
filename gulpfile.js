@@ -12,7 +12,7 @@ const clip = require("gulp-clip-empty-files"),
   sassTypes = require("node-sass").types,
   webpack = require("webpack-stream"),
   uglify = require("gulp-uglify"),
-  util = require("gulp-util");
+  through = require("through2");
 const DEST = "./app";
 const TEST_URL = "http://localhost:9876/all";
 const IS_DEV = process.env.NODE_ENV === "development";
@@ -67,7 +67,7 @@ gulp.task("js", function () {
     .src("./src/*.js")
     .pipe(named())
     .pipe(webpack(webpackConfig))
-    .pipe(IS_DEV ? util.noop() : uglify())
+    .pipe(IS_DEV ? through.obj() : uglify())
     .pipe(gulp.dest(DEST));
 });
 
