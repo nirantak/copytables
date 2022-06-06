@@ -22,14 +22,14 @@ var defaults = {
   "scroll.amount": 30,
   "scroll.acceleration": 5,
 
-  "copy.format.enabled.richHTML": true,
   "copy.format.enabled.richHTMLCSS": true,
-  "copy.format.enabled.textCSV": true,
-  "copy.format.enabled.textCSVSwap": true,
-  "copy.format.enabled.textHTML": true,
-  "copy.format.enabled.textHTMLCSS": true,
+  "copy.format.enabled.richHTML": true,
   "copy.format.enabled.textTabs": true,
   "copy.format.enabled.textTabsSwap": true,
+  "copy.format.enabled.textCSV": true,
+  "copy.format.enabled.textCSVSwap": true,
+  "copy.format.enabled.textHTMLCSS": true,
+  "copy.format.enabled.textHTML": true,
   "copy.format.enabled.textTextile": true,
 
   "copy.format.default.richHTMLCSS": true,
@@ -106,11 +106,6 @@ var copyFormats = [
     id: "textTextile",
     name: "Textile",
     desc: "Copy as Textile (Text content)",
-  },
-  {
-    id: "textTextileHTML",
-    name: "Textile+HTML",
-    desc: "Copy as Textile (HTML content)",
   },
 ];
 

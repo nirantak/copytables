@@ -35,7 +35,7 @@ function asCSV(mat) {
     .join("\n");
 }
 
-function asTextile(mat, withHTML) {
+function asTextile(mat) {
   var rows = mat.map(function (row) {
     var cells = row
       .filter(function (node) {
@@ -45,8 +45,7 @@ function asTextile(mat, withHTML) {
         var t = "",
           s = "";
 
-        if (withHTML) t = dom.htmlContent(node.td);
-        else t = dom.textContent(node.td);
+        t = dom.textContent(node.td);
 
         if (node.colSpan) s += "\\" + (node.colSpan + 1);
         if (node.rowSpan) s += "/" + (node.rowSpan + 1);
@@ -159,18 +158,6 @@ M.formats.textHTMLCSS = {
   },
 };
 
-M.formats.textTextileHTML = {
-  opts: {
-    method: "clipboard",
-    withSelection: true,
-    keepStyles: false,
-    keepHidden: false,
-  },
-  exec: function (t) {
-    clipboard.copyText(asTextile(t.nodeMatrix(), true));
-  },
-};
-
 M.formats.textTextile = {
   opts: {
     method: "clipboard",
@@ -179,7 +166,7 @@ M.formats.textTextile = {
     keepHidden: false,
   },
   exec: function (t) {
-    clipboard.copyText(asTextile(t.nodeMatrix(), false));
+    clipboard.copyText(asTextile(t.nodeMatrix()));
   },
 };
 
