@@ -34,7 +34,11 @@ const webpackConfig = {
     rules: [
       {
         test: /\.js$/,
-        loader: __dirname + "/convert-logs?" + (IS_DEV ? "dev" : ""),
+        use: [
+          {
+            loader: __dirname + "/convert-logs?" + (IS_DEV ? "dev" : ""),
+          },
+        ],
       },
     ],
   },

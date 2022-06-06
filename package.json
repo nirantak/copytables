@@ -1,6 +1,6 @@
 {
   "name": "copytables",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Firefox extension to select and copy table cells",
   "author": "Nirantak Raghav",
   "license": "MIT",
@@ -20,29 +20,29 @@
     "format": "prettier --write '!app/**/*' '**/*.{js,scss,html,json}'"
   },
   "engines": {
-    "node": "16.10.0",
-    "npm": "7.24.2"
+    "node": "18.3.0",
+    "npm": "8.11.0"
   },
   "dependencies": {
-    "del": "^6.0.0",
+    "del": "^6.1.1",
     "gulp": "^4.0.2",
     "gulp-clip-empty-files": "^0.1.2",
     "gulp-pug": "^5.0.0",
     "gulp-rename": "^2.0.0",
-    "gulp-sass": "^5.0.0",
+    "gulp-sass": "^5.1.0",
     "gulp-uglify": "^3.0.2",
-    "node-sass": "^6.0.1",
+    "node-sass": "^7.0.1",
     "vinyl-named": "^1.1.0",
-    "webpack-stream": "^6.1.2"
+    "webpack-stream": "^7.0.0"
   },
   "devDependencies": {
-    "concurrently": "^6.3.0",
-    "express": "^4.17.1",
-    "glob": "^7.2.0",
-    "jasmine": "^3.9.0",
+    "concurrently": "^7.2.1",
+    "express": "^4.18.1",
+    "glob": "^8.0.3",
+    "jasmine": "^4.1.0",
     "mustache": "^4.2.0",
-    "prettier": "^2.4.1",
-    "web-ext": "^6.4.0"
+    "prettier": "^2.6.2",
+    "web-ext": "^6.8.0"
   },
   "repository": {
     "type": "git",

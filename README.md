@@ -18,7 +18,7 @@ Forked from [gebrkn/copytables](https://github.com/gebrkn/copytables) for Chrome
 
 ## Building the Extension
 
-Build tested using: `node` v16.10.0 (`npm` v7.24.2) on macOS 11.6
+Build tested using: `node` v18.3.0 (`npm` v8.11.0) on macOS 12.4
 
 ```bash
 # Clone the repo
@@ -30,7 +30,7 @@ npm install
 
 # Build zipped extension
 npm run deploy
-## Output: copytables-0.1.0.zip
+## Output: copytables-0.1.1.zip
 
 # Test in development mode
 npm start

@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "CopyTables",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage_url": "https://github.com/nirantak/copytables",
   "description": "Select table cells, rows and columns with your mouse or from a context menu. Copy as rich text, HTML, CSV and TSV",
   "author": "Nirantak Raghav",
