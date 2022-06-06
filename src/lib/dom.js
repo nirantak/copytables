@@ -182,11 +182,11 @@ M.deselect = function () {
 };
 
 M.select = function (el) {
-  var range = document.createRange(),
-    selection = window.getSelection();
+  var range = document.createRange();
+  var selection = window.getSelection();
+  selection.removeAllRanges();
 
   range.selectNodeContents(el);
-  selection.removeAllRanges();
   selection.addRange(range);
 };
 
