@@ -42,7 +42,7 @@
     "jasmine": "^4.1.0",
     "mustache": "^4.2.0",
     "prettier": "^2.6.2",
-    "web-ext": "^6.8.0"
+    "web-ext": "^7.5.0"
   },
   "repository": {
     "type": "git",
